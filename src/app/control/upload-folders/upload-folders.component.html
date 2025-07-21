@@ -1,0 +1,43 @@
+<div class="container">
+  <h3 class="title">أختر الهيئه و الملف للرفع</h3>
+  <div class="blue-bar"></div>
+  <div class="card-container">
+    <form [formGroup]="fileForm">
+      <ul>
+        <div class="grid-list">
+            <li>
+                <p-dropdown
+                  formControlName="administration"
+                  [options]="ministryAdministrationList"
+                  [(ngModel)]="selectAdministration"
+                  placeholder="Administration"/>
+            </li>
+            <li>
+                <p-dropdown
+                  formControlName="fileName"
+                  [options]="administrationFileName"
+                  [(ngModel)]="selectAdministration"
+                  placeholder="File Name"/>
+            </li>
+        </div>
+        <div class="grid-list">
+          <li>
+            <div class="errorMessage" [ngStyle]="fileForm.invalid && fileForm.touched ? { visibility: 'visible' } : { visibility: 'hidden' }">
+              <span class="errorText">
+                The File Uploaded doesn't have the proper name
+              </span>
+            </div>
+            <span style="font-size: 20px; margin: 0px 0px 3px 3px"> Select the folder to upload</span>
+              <p-fileUpload
+                mode="basic"
+                chooseLabel="Select Folder"
+                chooseIcon="pi pi-upload"
+                name="demo[]"
+                [maxFileSize]="1000000"
+                (onSelect)="onSelect($event)" />
+          </li>
+        </div>
+      </ul>
+    </form>
+  </div>
+</div>
