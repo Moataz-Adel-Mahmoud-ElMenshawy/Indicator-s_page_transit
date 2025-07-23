@@ -12,6 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import * as XLSX from 'xlsx';
 import { FileUploadService } from '../../services/file-upload.service';
 import { administrations, fileAdministration } from '../../interfaces/upload-page';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-upload-folders',
@@ -101,9 +102,59 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   /*
   *  On file Uplaod function
   */
-  onSelect(event: FileUploadEvent | any) {
-    const FileName: string = event.files?.[0].name;
-    const AdminiFileName: string = this.fileForm.get('fileName')?.value;
+  async onSelect(event: FileUploadEvent | any) {
+    const file = event.files[0]; //.[0];
+    const adminiName: any = this.fileForm.get('administration')?.value;
+    const fileAdminName: string = this.fileForm.get('fileName')?.value;
+    const startDate: string = this.fileForm.get('start_date')?.value;
+    const endDate: string = this.fileForm.get('end_date')?.value;
+
+    // const fileBinaryString = await convertFileToBinaryString(file);
+
+    console.log(file);
+    console.log(typeof file);
+    console.log(adminiName.Code);
+    console.log(fileAdminName);
+    console.log(startDate.toString());
+    console.log(endDate.toString());
+
+    //Body
+    const formData = new FormData();
+    formData.append('file', file);
+
+    //headers
+    const httpHeader = new HttpHeaders({
+      'entityId': adminiName.Code.toString(),
+      'fromDate': startDate,
+      'toDate': endDate,
+    })
+
+    ////WITHOUT ANY VALIDATIONS --BACKEND REQUEST--
+    this.pushFileandCodetoBackEnd(formData, httpHeader);
+
+    // Functions
+    function convertFileToBinaryString(file: File | Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    // Validate input
+    if (!file || !(file instanceof File || file instanceof Blob)) {
+      reject(new Error('Invalid file: not a File or Blob object'));
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+
+    reader.onerror = () => {
+      reject(reader.error || new Error('Failed to read file'));
+    };
+
+    reader.readAsBinaryString(file);
+  });
+
+}
   };
 
   ShowCodeOfSelectedAdmin(data:any){
@@ -122,7 +173,7 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
         this.administrationAndCode = [...res];
       }
     })
-  }
+  };
 
   getAdministrationFilesFrom(Code: number){
     this._IDSCServices.getApiAdminfiles(Code).subscribe({
@@ -133,6 +184,17 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
       complete:()=>{
         //get Data fromlast row
         this.filesOfAdministration = this.filesAndAdministration[0].UploadExcel;
+      }
+    })
+  };
+
+  pushFileandCodetoBackEnd(formData: FormData, headers: any){
+    this._IDSCServices.postApiData(formData, headers).subscribe({
+      error:()=>{
+        console.log('HUGE FAIL !!!!!!!!!!!')
+      },
+      complete:()=>{
+        console.log('HUGE SUCCESS')
       }
     })
   }
