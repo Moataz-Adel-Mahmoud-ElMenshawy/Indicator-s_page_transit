@@ -8,14 +8,19 @@
             <li>
                 <p-dropdown
                   formControlName="administration"
-                  [options]="ministryAdministrationList"
+                  [options]="administrationAndCode"
+                  optionLabel="Description"
+                  (onChange)="ShowCodeOfSelectedAdmin($event)"
                   placeholder="Administration"/>
             </li>
             <li>
-                <p-dropdown
+              <div *ngIf="fileForm.get('administration')?.valid">
+                  <p-dropdown
                   formControlName="fileName"
-                  [options]="administrationFileName"
+                  [options]="filesOfAdministration"
                   placeholder="File Name"/>
+              </div>
+
             </li>
         </div>
 

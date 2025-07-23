@@ -10,6 +10,8 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { FileUploadEvent } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import * as XLSX from 'xlsx';
+import { FileUploadService } from '../../services/file-upload.service';
+import { administrations, fileAdministration } from '../../interfaces/upload-page';
 
 @Component({
   selector: 'app-upload-folders',
@@ -24,6 +26,10 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   fileForm!: FormGroup;
   uploadFile!: any;
   selectAdministration!: string;
+  administrationAndCode!: administrations[];
+  filesAndAdministration!:fileAdministration[];
+  filesOfAdministration!: string[];
+  CodeOfSelectedAdmin!:number;
 
   //Table control
   headers: string[] = [];
@@ -32,10 +38,8 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
 
   constructor(
     private Formbuild: FormBuilder,
+    private _IDSCServices: FileUploadService,
   ){}
-
-  ministryAdministrationList!: string[];
-  administrationFileName!: string[];
 
   ngOnInit(): void {
     this.Initialize();
@@ -45,6 +49,9 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   * On page initialization
   */
   Initialize(){
+
+    ///Get Administration data from server
+    this.getAdministrationsFromServer();
 
     // Form build
     this.fileForm = this.Formbuild.group({
@@ -56,30 +63,6 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
         this.dateGreaterThan('start_date') // Custom validator to ensure end_date > start_date
       ]),
     });
-
-    this.ministryAdministrationList = ["Administration 1",
-      "Administration 2",
-      "Administration 3",
-      "Administration 4"
-    ];
-
-    this.administrationFileName = [
-      "ثالثا إيرادات قطاع النقل - إجمالى إيرادات وزارة النقل والجهات التابعة",
-      "مؤشرات الدولة - وزارة النقل 9-7-2025",
-      "وزارة النقل - رابعا مؤشرات النقل النهرى عنصر بيان رقم 20-21-23-25",
-      "وزارة النقل - لوحة السكة الحديد ومترو الأنفاق - أولا مترو الأنفاق عنصر بيان 2 قيمة الدعم المقدم",
-      "وزارة النقل - لوحة السكة الحديد ومترو الأنفاق - أولا مترو الأنفاق عنصر بيان 4 قيمة ايرادات مترو الانفاق",
-      "وزارة النقل - لوحة السكة الحديد ومترو الأنفاق -أولا مترو الأنفاق عنصر بيان 1 عدد المستفيدين من الدعم المقدم",
-      "وزارة النقل - لوحة السكة الحديد ومترو الأنفاق -أولا مترو الأنفاق عنصر بيان 3 عدد الركاب",
-      "وزارة النقل- لوحة السكة الحديد ومترو الانفاق -ثالثاً تقييم كفاءة الخدمة - عنصر بيان رقم 23",
-      "وزارة النقل -لوحة النقل البحرى",
-      "وزارة النقل -لوحة النقل البرى والنهرى - أولا مؤشرات النقل البرى عنصر بيان رقم 3-4-5-12-13",
-      "وزارةالنقل - ثالثا مؤشرات الطرق والكبارى - عنصر رقم 17 الطرق المرصوفة التابعة لوزارة النقل",
-      "وزارةالنقل - ثانيا الإنفاق والإستثمار - عنصر رقم 5 الانفاق الحكومى",
-    ];
-
-    this.headers = ["Soluman Grundy", "Born on a Monday", "Christened on Tuesday", "Can\'t remember the rest"]
-    this.rows = ["Hello", "Kitten", 18, "Wanker"]
 
   };
 
@@ -116,19 +99,43 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   }
 
   /*
-  *   On file Uplaod function
+  *  On file Uplaod function
   */
   onSelect(event: FileUploadEvent | any) {
     const FileName: string = event.files?.[0].name;
     const AdminiFileName: string = this.fileForm.get('fileName')?.value;
-
-
   };
 
-  // cleanUploadFileName(filename: string){
+  ShowCodeOfSelectedAdmin(data:any){
+    //repeat the data again
+    this.getAdministrationFilesFrom(data.value.Code);
+  };
 
-  // }
+  /*
+  *  Api data functions
+  */
 
+  getAdministrationsFromServer(){
+    this._IDSCServices.getApiAdministrations().subscribe({
+      next:(res:any)=>{
+        //get data of administration
+        this.administrationAndCode = [...res];
+      }
+    })
+  }
+
+  getAdministrationFilesFrom(Code: number){
+    this._IDSCServices.getApiAdminfiles(Code).subscribe({
+      next:(res:any)=>{
+        ///get Files from Administration
+        this.filesAndAdministration = [...res];
+      },
+      complete:()=>{
+        //get Data fromlast row
+        this.filesOfAdministration = this.filesAndAdministration[0].UploadExcel;
+      }
+    })
+  }
   ngOnDestroy(): void {
 
   };

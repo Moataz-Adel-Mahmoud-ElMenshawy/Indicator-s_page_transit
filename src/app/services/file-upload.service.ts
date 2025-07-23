@@ -11,7 +11,6 @@ export class FileUploadService {
     private _httpClient: HttpClient
   ) { }
 
-
   getApiAdministrations():Observable<any>{
     return this._httpClient.get<any>('http://10.4.30.8:9877/api/JDSC/strings');
   };
