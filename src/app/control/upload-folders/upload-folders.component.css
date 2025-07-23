@@ -1,5 +1,5 @@
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "HelveticaArabicRegular","sans-serif";
   margin: 0;
   padding: 0;
   background-color: #f4f6fc; /* Light background */
@@ -8,8 +8,9 @@ body {
 
 .container {
   max-width: 800px;
+  font-family: "HelveticaArabicRegular","sans-serif";
   margin: 20px auto;
-  color: #9A9797 5%;
+  color: #919191 5%;
   position: relative;
 }
 
@@ -21,6 +22,24 @@ body {
   padding: 20px;
   box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   margin-bottom: 2%;
+}
+
+label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.card-container.row {
+  display: flex;
+  justify-content: space-between; /* Align buttons on opposite sides */
+  align-items: center;
+  height: fit-content;
+  margin-top: 20px;
+}
+
+.card-container.row .button {
+  margin-left: 10px;
 }
 
 .blue-bar{
@@ -40,15 +59,23 @@ ul {
   list-style: none;
   padding: 0;
   display: grid;
-  flex-wrap: wrap;
-  gap: 10%;
-  height: max-content;
+  flex-wrap: nowrap;
+  gap: 20px;
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 calc(50% - 20px);
+  padding: 10px;
+  position: relative;
+  min-height: 60px;
 }
 
 /* Grid based system */
 .grid-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   list-style: none;
   padding: 0;
   margin: 0;
@@ -79,6 +106,31 @@ ul {
   font-weight: bold;
 }
 
+/* Update the value of columns */
+
+input[type="date"] {
+  border: 2px solid #0056b3; /* Blue border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 2rem;
+  padding: 8px 12px;
+  font-size: 16px;
+  width: 200px;
+  outline: none;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Change border color on focus */
+input[type="date"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 91, 255, 0.5);
+}
+
+/* WebKit browsers (Chrome, Edge, Safari) - Change icon color */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(26%) sepia(99%)
+}
+
 /* p-dropdown CSS */
 
 /* COMPONENT SCOPED VERSION */
@@ -89,6 +141,11 @@ ul {
   width: 100%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 2%;
+}
+
+:host ::ng-deep .p-dropdown.p-inputwrapper-focus{
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 91, 255, 0.5);
 }
 
 :host ::ng-deep .p-dropdown-items{
@@ -103,17 +160,17 @@ ul {
 }
 
 :host ::ng-deep .p-dropdown-item:hover{
-    background: #0d59c4;
-    color: #cdcdcd;
+  background: #0d59c4;
+  color: #cdcdcd;
 }
 
-/* File Upload */
+/* File Upload PrimeNG button */
 
 :host ::ng-deep .p-fileupload{
   padding: 15px;
   margin: 5px 0px 0px 0px;
   width: 100%;
-  height: fit-content;
+  height: 5px;
 }
 
 :host ::ng-deep .p-fileupload-choose{
@@ -131,7 +188,6 @@ ul {
   box-shadow: 0 0 12px rgba(15, 71, 255, 0.8);
 }
 
-
 /* Upload file section */
 
 .uploadDiv{
@@ -148,4 +204,49 @@ ul {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   cursor: pointer;
+}
+
+/*
+*  Page Table
+*/
+
+.container .table-data {
+  max-height: 200px; /* Adjust based on row height */
+  overflow-y: auto; /* Enables vertical scrolling when content exceeds max height */
+  border: 1px solid #ccc; /* Adds a border around the table */
+  padding: 10px; /* Adds some space inside */
+  background-color: #fff; /* Optional: Keeps background clean */
+}
+
+table {
+  width: 100%; /* Full width of the container */
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  padding: 15px;
+  text-align: left;
+  border: 1px solid #ddd; /* Subtle borders */
+}
+
+.styled-table th {
+  background: #030303; /* Header background color */
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  gap: 10px;
+}
+
+.styled-table td {
+  color: #2c3e50;
+  font-size: 0.75rem;
+}
+
+.styled-table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Alternating row colors */
 }

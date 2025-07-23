@@ -1,1 +1,87 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Input forms Error Message */
+.err_message {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%); /* Centers it under the input */
+  color: rgb(165, 0, 0);
+  font-family: 'Tajawal', sans-serif;
+  font-weight: lighter;
+  font-style: oblique;
+  font-size: 12px;
+  line-height: 14.4px;
+  white-space: nowrap;
+  text-align: center;
+  width: 80%;
+  pointer-events: none;
+}
+
+/* Tooltip side in Create*/
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip-text {
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 700;  /* Bold */
+  font-size: 12px;
+  line-height: 14.4px;
+  letter-spacing: 0; /* No extra spacing */
+
+  visibility: hidden;
+  width: 180px;
+  background-color: #6A7EFC;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+
+  white-space: normal;
+  word-wrap: break-word;
+  z-index: 1000;
+}
+
+.tooltip-error{
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 700;  /* Bold */
+  font-size: 16px;
+  line-height: 14.4px;
+  letter-spacing: 0; /* No extra spacing */
+  z-index: 99999;
+
+  visibility: hidden;
+  width: 180px;
+  border-color: rgb(165, 0, 0);
+  color: rgb(220, 50, 50);
+  text-align: center;
+  padding: 5px;
+  border-radius: 300px;
+
+  white-space: nowrap;
+  position: absolute;
+  top:100%;
+  right:-20%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip:hover .tooltip-error{
+  visibility: visible;
+  opacity: 1;
+}

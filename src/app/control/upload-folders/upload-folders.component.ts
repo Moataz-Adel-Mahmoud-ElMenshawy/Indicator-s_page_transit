@@ -1,10 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup,
+        FormsModule, ReactiveFormsModule,
+        ValidationErrors,
+        ValidatorFn} from '@angular/forms';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FileUploadEvent } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-upload-folders',
@@ -19,7 +24,10 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   fileForm!: FormGroup;
   uploadFile!: any;
   selectAdministration!: string;
-  // ministryAdministrationList: string[] = ["One","Two","Three"];
+
+  //Table control
+  headers: string[] = [];
+  rows: any[] = [];
 
   constructor(
     private Formbuild: FormBuilder,
@@ -41,6 +49,11 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
     this.fileForm = this.Formbuild.group({
       administration: new FormControl('',[]),
       fileName: new FormControl('',[]),
+      start_date: new FormControl('', [RxwebValidators.required()]),
+      end_date: new FormControl({ value: '', disabled: false }, [
+        RxwebValidators.required(),
+        this.dateGreaterThan('start_date') // Custom validator to ensure end_date > start_date
+      ]),
     });
 
     this.ministryAdministrationList = ["Administration 1",
@@ -62,7 +75,10 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
       "وزارة النقل -لوحة النقل البرى والنهرى - أولا مؤشرات النقل البرى عنصر بيان رقم 3-4-5-12-13",
       "وزارةالنقل - ثالثا مؤشرات الطرق والكبارى - عنصر رقم 17 الطرق المرصوفة التابعة لوزارة النقل",
       "وزارةالنقل - ثانيا الإنفاق والإستثمار - عنصر رقم 5 الانفاق الحكومى",
-    ]
+    ];
+
+    this.headers = ["Soluman Grundy", "Born on a Monday", "Christened on Tuesday", "Can\'t remember the rest"]
+    this.rows = ["Hello", "Kitten", 18, "Wanker"]
 
   };
 
@@ -76,6 +92,27 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
       //Trigger Error Message
     }
   };
+
+  /*
+  *  Validation function
+  */
+
+  // Custom validator to ensure end_date is greater than start_date
+  dateGreaterThan(startDateField: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const startDate = control?.parent?.get(startDateField)?.value;
+      const endDate = control?.value;
+
+      // Skip validation if any field is empty
+      if (!startDate || !endDate) return null;
+
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      // Return error if end_date is before start_date
+      return end > start ? null : { dateInvalid: "End date can't pre Start date"};
+    };
+  }
 
   /*
   *
