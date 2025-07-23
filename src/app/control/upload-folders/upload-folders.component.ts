@@ -28,6 +28,7 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   //Table control
   headers: string[] = [];
   rows: any[] = [];
+  a7a = true;
 
   constructor(
     private Formbuild: FormBuilder,
@@ -115,12 +116,18 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   }
 
   /*
-  *
+  *   On file Uplaod function
   */
   onSelect(event: FileUploadEvent | any) {
-    console.log('Done upload ' + event.files?.[0].name);
-    console.log(event.files);
-  }
+    const FileName: string = event.files?.[0].name;
+    const AdminiFileName: string = this.fileForm.get('fileName')?.value;
+
+
+  };
+
+  // cleanUploadFileName(filename: string){
+
+  // }
 
   ngOnDestroy(): void {
 

@@ -143,6 +143,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 2%;
 }
 
+:host ::ng-deep .p-dropdown:disabled{
+  border: 2px solid #000000;
+  font-size: 20px;
+}
+
 :host ::ng-deep .p-dropdown.p-inputwrapper-focus{
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 91, 255, 0.5);

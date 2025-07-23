@@ -9,21 +9,19 @@
                 <p-dropdown
                   formControlName="administration"
                   [options]="ministryAdministrationList"
-                  [(ngModel)]="selectAdministration"
                   placeholder="Administration"/>
             </li>
             <li>
                 <p-dropdown
                   formControlName="fileName"
                   [options]="administrationFileName"
-                  [(ngModel)]="selectAdministration"
                   placeholder="File Name"/>
             </li>
         </div>
 
         <div class="grid-list">
           <li>
-                    <!-- Start Date Input -->
+                    <!-- Start Date Input  -->
             <label for="startDate">{{'Beginning Date'}}
               <i class="tooltip fa-solid fa-circle-info">
                 <span class="tooltip-text">Select a start date</span>
@@ -54,7 +52,7 @@
               [ngClass]="{'is-valid': !fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched,
               'is-invalid': fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched }">
               <div class="tooltip-error"
-                *ngIf="fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched || fileForm.get('end_date')?.errors?.['dateInvalid']">
+                *ngIf="fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched && fileForm.get('end_date')?.errors?.['dateInvalid']">
                 {{(fileForm.get('end_date')?.errors?.['dateInvalid'])?
                   (fileForm.get('end_date')?.errors?.['dateInvalid']):
                   "Error, Please make sure to select a value"}}
@@ -64,9 +62,12 @@
           </li>
         </div>
 
-        <div class="grid-list">
+        <div class="grid-list" [ngStyle]="fileForm.valid &&
+            (fileForm.get('start_date')?.valid &&  fileForm.get('start_date')?.touched && fileForm.get('end_date')?.valid && fileForm.get('end_date')?.touched &&
+             fileForm.get('fileName')?.valid && fileForm.get('fileName')?.touched && fileForm.get('administration')?.valid && fileForm.get('administration')?.touched)
+            ? { display: 'grid' } : { display: 'none' }">
           <li>
-            <div class="errorMessage" [ngStyle]="fileForm.invalid && fileForm.touched ? { display: 'grid' } : { display: 'none' }">
+            <div class="errorMessage" [ngStyle]="">
               <span class="errorText">
                 The File selected doesn't have the proper name
               </span>
@@ -85,23 +86,5 @@
         </div>
       </ul>
     </form>
-
-        <!-- Table Section (Hidden by Default, Shown on Button Click) -->
-    <div class="container table-data">
-      <ng-container>
-        <table *ngIf="rows.length" class="styled-table">
-          <thead>
-            <tr>
-              <th *ngFor="let header of headers">{{ header }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let row of rows">
-              <td *ngFor="let cell of row">{{ cell }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </ng-container>
-    </div>
   </div>
 </div>

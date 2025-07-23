@@ -12,11 +12,15 @@ export class FileUploadService {
   ) { }
 
 
-  getApiData():Observable<any>{
-    return this._httpClient.get<any>('');
-  }
+  getApiAdministrations():Observable<any>{
+    return this._httpClient.get<any>('http://10.4.30.8:9877/api/JDSC/strings');
+  };
+
+  getApiAdminfiles(code: number):Observable<any>{
+    return this._httpClient.get<any>(`http://10.4.30.8:9877/api/JDSC/strings/entity/${code}`);
+  };
 
   postApiData(data: any):Observable<any>{
-    return this._httpClient.post<any>('',data);
+    return this._httpClient.post<any>('http://10.4.30.8:9877/api/JDSC/upload-excel',data);
   }
 }
