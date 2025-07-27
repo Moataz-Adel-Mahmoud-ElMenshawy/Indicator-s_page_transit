@@ -1,0 +1,8 @@
+{
+  "Ministry of Transportation" : "وزارة النقل",
+  "Administration" : "الهيئه",
+  "Report beginning date" : "أول تاريخ التقرير",
+  "Report end date": "أخر تاريخ التقرير",
+  "Error, Please make sure to select a value": "تأكد من أختيار قيم",
+  "End date can't pre Start date": "وقت الأنتهاء لا يمكن أن يسبق وقت البدأ"
+}

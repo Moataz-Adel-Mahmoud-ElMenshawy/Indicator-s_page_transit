@@ -11,14 +11,14 @@
                   [options]="administrationAndCode"
                   optionLabel="Description"
                   (onChange)="ShowCodeOfSelectedAdmin($event)"
-                  placeholder="Administration"/>
+                  placeholder=الهيئة/>
             </li>
             <li>
-              <div *ngIf="fileForm.get('administration')?.valid">
+              <div *ngIf="fileForm.get('administration')?.valid && fileForm.get('administration')?.touched">
                   <p-dropdown
                   formControlName="fileName"
                   [options]="filesOfAdministration"
-                  placeholder="File Name"/>
+                  placeholder="ملف الهيئة"/>
               </div>
 
             </li>
@@ -27,7 +27,7 @@
         <div class="grid-list">
           <li>
                     <!-- Start Date Input  -->
-            <label for="startDate">{{'Beginning Date'}}
+            <label for="startDate">{{'Report beginning date' | translate}}
               <i class="tooltip fa-solid fa-circle-info">
                 <span class="tooltip-text">Select a start date</span>
               </i>
@@ -38,7 +38,7 @@
                 'is-invalid': fileForm.get('start_date')?.errors && fileForm.get('start_date')?.touched }">
               <div class="tooltip-error"
                 *ngIf="fileForm.get('start_date')?.errors && fileForm.get('start_date')?.touched">
-                {{"Error, Please make sure to select a value"}}
+                {{"Error, Please make sure to select a value"| translate}}
               </div>
             </div>
 
@@ -46,21 +46,21 @@
 
           <li>
                     <!-- End Date Input -->
-            <label for="endDate">{{'End Date'}}
+            <label for="endDate">{{'Report end date' | translate}}
               <i class="tooltip fa-solid fa-circle-info">
                 <span class="tooltip-text">End date must follow chronologically after the Start date</span>
               </i>
             </label>
             <div class="tooltip">
               <input id="endDate" formControlName="end_date" type="date"
-              [disabled]="!fileForm.get('end_date')?.disabled"
+              [disabled]="!fileForm.get('start_date')?.valid"
               [ngClass]="{'is-valid': !fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched,
               'is-invalid': fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched }">
               <div class="tooltip-error"
                 *ngIf="fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched && fileForm.get('end_date')?.errors?.['dateInvalid']">
                 {{(fileForm.get('end_date')?.errors?.['dateInvalid'])?
                   (fileForm.get('end_date')?.errors?.['dateInvalid']):
-                  "Error, Please make sure to select a value"}}
+                  "Error, Please make sure to select a value"| translate}}
               </div>
             </div>
 
@@ -72,9 +72,11 @@
              fileForm.get('fileName')?.valid && fileForm.get('fileName')?.touched && fileForm.get('administration')?.valid && fileForm.get('administration')?.touched)
             ? { display: 'grid' } : { display: 'none' }">
           <li>
-            <div class="errorMessage" [ngStyle]="">
+
+            <div class="errorMessage"
+            *ngIf="fileForm.invalid && fileForm.touched">
               <span class="errorText">
-                The File selected doesn't have the proper name
+                {{"The File Upload failed" | translate}}
               </span>
             </div>
             <div *ngIf="fileForm.get('start_date')?.valid && fileForm.get('end_date')?.valid && fileForm.get('fileName')?.valid">

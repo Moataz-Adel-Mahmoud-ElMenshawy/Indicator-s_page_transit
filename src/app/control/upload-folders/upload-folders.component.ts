@@ -8,16 +8,16 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FileUploadEvent } from 'primeng/fileupload';
-import { ToastModule } from 'primeng/toast';
-import * as XLSX from 'xlsx';
-import { FileUploadService } from '../../services/file-upload.service';
-import { administrations, fileAdministration } from '../../interfaces/upload-page';
+import { FileUploadService } from '../../core/services/fileUpload/file-upload.service';
+import { administrations, fileAdministration } from '../../core/interfaces/upload-page';
 import { HttpHeaders } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-upload-folders',
   standalone: true,
-  imports: [DropdownModule, ToastModule, FileUploadModule, FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [DropdownModule, TranslateModule, FileUploadModule,
+            FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './upload-folders.component.html',
   styleUrl: './upload-folders.component.css'
 })
@@ -35,7 +35,6 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   //Table control
   headers: string[] = [];
   rows: any[] = [];
-  a7a = true;
 
   constructor(
     private Formbuild: FormBuilder,

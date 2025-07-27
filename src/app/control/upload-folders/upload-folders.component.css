@@ -255,3 +255,17 @@ td {
 .styled-table tr:nth-child(even) {
   background-color: #f9f9f9; /* Alternating row colors */
 }
+
+/*
+*  Validation
+*/
+
+
+.is-valid {
+  color: black;
+}
+
+.is-invalid {
+  border-color: 2px solid rgb(164, 1, 1);
+  background-color: #ffe6e6;
+}
