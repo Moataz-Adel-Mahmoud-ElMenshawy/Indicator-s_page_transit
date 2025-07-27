@@ -1,19 +1,22 @@
 .head-section{
   display: block;
-  margin: 0%;
-  padding: 0%;
+  margin: -1;
+  padding: 0;
   height: 20%;
   width: 100%;
+  position: relative;
 }
+
 .main-body{
   display: block;
   width: 100%;
   height: 60%;
-  margin: 0%;
-  padding: auto;
+  margin: 0;
+  padding: 0;
 }
+
 .footer-section{
-  display: flex;
+  display: block;
   margin: 0%;
   padding: 0%;
   height: 20%;
