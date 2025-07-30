@@ -14,7 +14,7 @@
                   placeholder=الهيئة/>
             </li>
             <li>
-              <div *ngIf="fileForm.get('administration')?.valid && fileForm.get('administration')?.touched">
+              <div *ngIf="fileForm.get('administration')?.value && fileForm.get('administration')?.touched">
                   <p-dropdown
                   formControlName="fileName"
                   [options]="filesOfAdministration"
@@ -29,7 +29,7 @@
                     <!-- Start Date Input  -->
             <label for="startDate">{{'Report beginning date' | translate}}
               <i class="tooltip fa-solid fa-circle-info">
-                <span class="tooltip-text">Select a start date</span>
+                <span class="tooltip-text">{{'Select a start date' | translate}}</span>
               </i>
             </label>
             <div class="tooltip">
@@ -80,7 +80,7 @@
               </span>
             </div>
             <div *ngIf="fileForm.get('start_date')?.valid && fileForm.get('end_date')?.valid && fileForm.get('fileName')?.valid">
-              <span style="font-size: 20px; margin: 0px 0px 3px 3px"> Select the folder to upload</span>
+              <span style="font-size: 20px; margin: 0px 0px 3px 3px">{{"Select the folder to upload" | translate}}</span>
               <p-fileUpload
                 mode="basic"
                 chooseLabel="Select Folder"

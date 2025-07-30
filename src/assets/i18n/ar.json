@@ -4,5 +4,7 @@
   "Report beginning date" : "أول تاريخ التقرير",
   "Report end date": "أخر تاريخ التقرير",
   "Error, Please make sure to select a value": "تأكد من أختيار قيم",
-  "End date can't pre Start date": "وقت الأنتهاء لا يمكن أن يسبق وقت البدأ"
+  "End date can't pre Start date": "وقت الأنتهاء لا يمكن أن يسبق وقت البدأ",
+  "Select a start date":" أخر تاريخ بدأ",
+  "Select the folder to upload": "أختار ملف للعرض"
 }

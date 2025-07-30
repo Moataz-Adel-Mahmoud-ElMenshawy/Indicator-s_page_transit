@@ -110,12 +110,12 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
 
     // const fileBinaryString = await convertFileToBinaryString(file);
 
-    console.log(file);
-    console.log(typeof file);
-    console.log(adminiName.Code);
-    console.log(fileAdminName);
-    console.log(startDate.toString());
-    console.log(endDate.toString());
+    // console.log(file);
+    // console.log(typeof file);
+    // console.log(adminiName.Code);
+    // console.log(fileAdminName);
+    // console.log(startDate.toString());
+    // console.log(endDate.toString());
 
     //Body
     const formData = new FormData();
@@ -190,11 +190,7 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   pushFileandCodetoBackEnd(formData: FormData, headers: any){
     this._IDSCServices.postApiData(formData, headers).subscribe({
       error:()=>{
-        console.log('HUGE FAIL !!!!!!!!!!!')
       },
-      complete:()=>{
-        console.log('HUGE SUCCESS')
-      }
     })
   }
   ngOnDestroy(): void {
