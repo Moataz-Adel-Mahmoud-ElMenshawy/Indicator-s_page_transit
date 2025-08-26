@@ -1,4 +1,7 @@
 <div class="container">
+
+  <p-confirmDialog appendTo="body" [position]="confirmationDialogPosition"/>
+
   <h3 class="title">أختر الهيئه و الملف للرفع</h3>
   <div class="blue-bar"></div>
   <div class="card-container">
@@ -20,13 +23,12 @@
                   [options]="filesOfAdministration"
                   placeholder="ملف الهيئة"/>
               </div>
-
             </li>
         </div>
 
         <div class="grid-list">
+                              <!-- Start Date Input  -->
           <li>
-                    <!-- Start Date Input  -->
             <label for="startDate">{{'Report beginning date' | translate}}
               <i class="tooltip fa-solid fa-circle-info">
                 <span class="tooltip-text">{{'Select a start date' | translate}}</span>
@@ -43,9 +45,8 @@
             </div>
 
           </li>
-
+                              <!-- End Date Input -->
           <li>
-                    <!-- End Date Input -->
             <label for="endDate">{{'Report end date' | translate}}
               <i class="tooltip fa-solid fa-circle-info">
                 <span class="tooltip-text">End date must follow chronologically after the Start date</span>
@@ -53,7 +54,7 @@
             </label>
             <div class="tooltip">
               <input id="endDate" formControlName="end_date" type="date"
-              [disabled]="!fileForm.get('start_date')?.valid"
+              [disabled]="!fileForm.get('start_date')?.value"
               [ngClass]="{'is-valid': !fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched,
               'is-invalid': fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched }">
               <div class="tooltip-error"
@@ -68,29 +69,51 @@
         </div>
 
         <div class="grid-list" [ngStyle]="fileForm.valid &&
-            (fileForm.get('start_date')?.valid &&  fileForm.get('start_date')?.touched && fileForm.get('end_date')?.valid && fileForm.get('end_date')?.touched &&
-             fileForm.get('fileName')?.valid && fileForm.get('fileName')?.touched && fileForm.get('administration')?.valid && fileForm.get('administration')?.touched)
+            (fileForm.get('start_date')?.valid &&  fileForm.get('start_date')?.touched
+             && fileForm.get('end_date')?.valid
+             && fileForm.get('fileName')?.valid && fileForm.get('fileName')?.touched
+             && fileForm.get('administration')?.valid && fileForm.get('administration')?.touched)
             ? { display: 'grid' } : { display: 'none' }">
+
           <li>
 
             <div class="errorMessage"
-            *ngIf="fileForm.invalid && fileForm.touched">
-              <span class="errorText">
+            *ngIf="fileForm.invalid && fileForm.touched && isMSG && errormessage">
+              <span class="successText">
                 {{"The File Upload failed" | translate}}
               </span>
             </div>
             <div *ngIf="fileForm.get('start_date')?.valid && fileForm.get('end_date')?.valid && fileForm.get('fileName')?.valid">
               <span style="font-size: 20px; margin: 0px 0px 3px 3px">{{"Select the folder to upload" | translate}}</span>
               <p-fileUpload
+                #fileuploadID
                 mode="basic"
-                chooseLabel="Select Folder"
+                [auto]="false"
+                chooseLabel="Select a Folder"
                 chooseIcon="pi pi-upload"
-                name="demo[]"
-                [maxFileSize]="1000000"
+                [showCancelButton]="true"
+                cancelIcon="pi pi-times"
+                [showUploadButton]="true"
+                uploadLabel="Upload"
                 (onSelect)="onSelect($event)" />
+
+              <div class="action-buttons" [ngStyle]="isButtonControls? {display: 'flex'}:{display: 'true'}">
+                <p-button icon="pi pi-check" iconPos="top" (onClick)="onUpload($event)"/>
+
+                <p-button icon="pi pi-times" iconPos="top" (onClick)="onCancel()"/>
+              </div>
+
+            </div>
+            <div class="successmessage"
+             *ngIf="fileForm.valid && fileForm.touched && isMSG && successmessage">
+              <span class="successText">
+                {{"The File Upload failed" | translate}}
+              </span>
             </div>
           </li>
+
         </div>
+
       </ul>
     </form>
   </div>

@@ -1,0 +1,83 @@
+<div class="container">
+  <h3 class="title">أختر الهيئه و الملف للتعديل</h3>
+  <div class="blue-bar"></div>
+  <div class="card-container">
+    <form [formGroup]="fileForm">
+      <ul>
+        <div class="grid-list">
+            <li>
+                  <p-dropdown
+                  formControlName="fileName"
+                  [options]="filesOfAdministration"
+                  placeholder="ملف الهيئة"/>
+
+            </li>
+            <li>
+
+            </li>
+        </div>
+
+        <div class="grid-list">
+          <li>
+                    <!-- Start Date Input  -->
+            <label for="startDate">{{'Report beginning date' | translate}}
+              <i class="tooltip fa-solid fa-circle-info">
+                <span class="tooltip-text">{{'Select a start date' | translate}}</span>
+              </i>
+            </label>
+            <div class="tooltip">
+              <input id="startDate" formControlName="start_date" type="date"
+                [ngClass]="{'is-valid': !fileForm.get('start_date')?.errors && fileForm.get('start_date')?.touched,
+                'is-invalid': fileForm.get('start_date')?.errors && fileForm.get('start_date')?.touched }">
+              <div class="tooltip-error"
+                *ngIf="fileForm.get('start_date')?.errors && fileForm.get('start_date')?.touched">
+                {{"Error, Please make sure to select a value"| translate}}
+              </div>
+            </div>
+
+          </li>
+
+          <li>
+                    <!-- End Date Input -->
+            <label for="endDate">{{'Report end date' | translate}}
+              <i class="tooltip fa-solid fa-circle-info">
+                <span class="tooltip-text">End date must follow chronologically after the Start date</span>
+              </i>
+            </label>
+            <div class="tooltip">
+              <input id="endDate" formControlName="end_date" type="date"
+              [disabled]="!fileForm.get('start_date')?.valid"
+              [ngClass]="{'is-valid': !fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched,
+              'is-invalid': fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched }">
+              <div class="tooltip-error"
+                *ngIf="fileForm.get('end_date')?.errors && fileForm.get('end_date')?.touched && fileForm.get('end_date')?.errors?.['dateInvalid']">
+                {{(fileForm.get('end_date')?.errors?.['dateInvalid'])?
+                  (fileForm.get('end_date')?.errors?.['dateInvalid']):
+                  "Error, Please make sure to select a value"| translate}}
+              </div>
+            </div>
+
+          </li>
+        </div>
+
+      </ul>
+    </form>
+
+    <div class="container table-data" *ngIf="showTable" >
+        <div class="blue-bar"></div>
+        <ng-container>
+          <table border="1">
+            <thead>
+              <tr>
+                  <th>{{ 'Agency ID' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let agency of dataEntriesOfAgency">
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+    </div>
+  </div>
+</div>

@@ -7,4 +7,12 @@
   <h3>
     {{'Ministry of Transportation'|translate}}
   </h3>
+
+  <div class="navigate-buttons">
+    @for(link of NavigationLinks; track link.name){
+      <a class="nav-item" [routerLink]="link.name" routerLinkActive="active">
+        {{link.label | translate}}
+      </a>
+    }
+  </div>
 </div>

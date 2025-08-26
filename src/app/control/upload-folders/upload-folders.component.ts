@@ -1,27 +1,32 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup,
         FormsModule, ReactiveFormsModule,
         ValidationErrors,
         ValidatorFn} from '@angular/forms';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DropdownModule } from 'primeng/dropdown';
-import { FileUploadModule } from 'primeng/fileupload';
+import { FileUpload, FileUploadModule } from 'primeng/fileupload';
 import { FileUploadEvent } from 'primeng/fileupload';
 import { FileUploadService } from '../../core/services/fileUpload/file-upload.service';
 import { administrations, fileAdministration } from '../../core/interfaces/upload-page';
 import { HttpHeaders } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-upload-folders',
   standalone: true,
   imports: [DropdownModule, TranslateModule, FileUploadModule,
-            FormsModule, CommonModule, ReactiveFormsModule],
+            FormsModule, CommonModule, ReactiveFormsModule, ConfirmDialogModule],
+  providers: [ConfirmationService],
   templateUrl: './upload-folders.component.html',
   styleUrl: './upload-folders.component.css'
 })
 export class UploadFoldersComponent implements OnInit, OnDestroy {
+
+  @ViewChild ('fileuploadID')fileupload!: FileUpload;
 
   ///Page assists
   fileForm!: FormGroup;
@@ -32,6 +37,13 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   filesOfAdministration!: string[];
   CodeOfSelectedAdmin!:number;
 
+  errormessage: string = '';
+  successmessage: string ='';
+  isMSG = false;
+  isButtonControls = false;
+  confirmationDialogPosition: string = 'top';
+
+
   //Table control
   headers: string[] = [];
   rows: any[] = [];
@@ -39,6 +51,7 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   constructor(
     private Formbuild: FormBuilder,
     private _IDSCServices: FileUploadService,
+    private _ConfirmationService: ConfirmationService
   ){}
 
   ngOnInit(): void {
@@ -57,12 +70,23 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
     this.fileForm = this.Formbuild.group({
       administration: new FormControl('',[]),
       fileName: new FormControl('',[]),
-      start_date: new FormControl('', [RxwebValidators.required()]),
-      end_date: new FormControl({ value: '', disabled: false }, [
+      start_date: new FormControl('', RxwebValidators.required()),
+      end_date: new FormControl({ value: '', disabled: true }, [
         RxwebValidators.required(),
         this.dateGreaterThan('start_date') // Custom validator to ensure end_date > start_date
       ]),
     });
+
+    // Enable/disable end_date based on start_date value
+    this.fileForm.get('start_date')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.fileForm.get('end_date')?.enable(); // Enable end_date when start_date is set
+      } else {
+        this.fileForm.get('end_date')?.setValue('');
+        this.fileForm.get('end_date')?.disable(); // Disable end_date if start_date is empty
+      }
+    });
+
 
   };
 
@@ -101,21 +125,15 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   /*
   *  On file Uplaod function
   */
-  async onSelect(event: FileUploadEvent | any) {
+  async onUpload(event: FileUploadEvent | any) {
+    this.isMSG =false;
+    this.errormessage = '';
+    this.successmessage ='';
     const file = event.files[0]; //.[0];
-    const adminiName: any = this.fileForm.get('administration')?.value;
+    const adminName: any = this.fileForm.get('administration')?.value;
     const fileAdminName: string = this.fileForm.get('fileName')?.value;
     const startDate: string = this.fileForm.get('start_date')?.value;
     const endDate: string = this.fileForm.get('end_date')?.value;
-
-    // const fileBinaryString = await convertFileToBinaryString(file);
-
-    // console.log(file);
-    // console.log(typeof file);
-    // console.log(adminiName.Code);
-    // console.log(fileAdminName);
-    // console.log(startDate.toString());
-    // console.log(endDate.toString());
 
     //Body
     const formData = new FormData();
@@ -123,7 +141,7 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
 
     //headers
     const httpHeader = new HttpHeaders({
-      'entityId': adminiName.Code.toString(),
+      'entityId': adminName.Code.toString(),
       'fromDate': startDate,
       'toDate': endDate,
     })
@@ -155,6 +173,27 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
 
 }
   };
+
+  async onSelect(event: FileUploadEvent | any){
+    if(!event){
+      this.isMSG = false;
+      this.isButtonControls = true;
+    }
+  }
+
+  onCancel(){
+    this._ConfirmationService.confirm({
+      message:"Unselect folder",
+      acceptButtonStyleClass: "p-button-danger",
+      rejectButtonStyleClass: "p-button-text",
+      accept:()=>{
+
+      },
+      reject:()=>{
+
+      }
+    })
+  }
 
   ShowCodeOfSelectedAdmin(data:any){
     //repeat the data again
@@ -189,10 +228,19 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
 
   pushFileandCodetoBackEnd(formData: FormData, headers: any){
     this._IDSCServices.postApiData(formData, headers).subscribe({
-      error:()=>{
+      next:()=>{
+        this.isMSG = true;
       },
+      error:()=>{
+        console.log("Err")
+        this.errormessage = "ERROR DURING UPLOAD"
+      },complete:()=>{
+        console.log("Succ")
+        this.successmessage = "Sucesss Upload"
+      }
     })
   }
+
   ngOnDestroy(): void {
 
   };
