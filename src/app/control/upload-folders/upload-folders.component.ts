@@ -147,7 +147,7 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
     this.errormessage = '';
     this.successmessage ='';
     const adminName: any = this.fileForm.get('administration')?.value;
-    const fileAdminName: string = this.fileForm.get('fileName')?.value;
+    const fileAdminName: any = this.fileForm.get('fileName')?.value;
     const startDate: string = this.fileForm.get('start_date')?.value;
     const endDate: string = this.fileForm.get('end_date')?.value;
 
@@ -159,8 +159,11 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
         formData.append('file', this.file);
 
         //Header of request
+        console.log(adminName.Id);
+        console.log(fileAdminName.Id);
         const httpHeader = new HttpHeaders({
           'entityId': adminName.Id,
+          'excelId': fileAdminName.Id,
           'fromDate': startDate,
           'toDate': endDate,
         })
@@ -250,7 +253,7 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
       complete:()=>{
         //get Data fromlast row
         console.log(this.filesAndAdministration);
-        this.filesOfAdministration = this.filesAndAdministration.map(item => item.Description);
+        this.filesOfAdministration = this.filesAndAdministration.map(item => item);
       }
     })
   };

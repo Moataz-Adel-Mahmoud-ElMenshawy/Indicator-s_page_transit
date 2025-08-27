@@ -28,7 +28,7 @@ import { FileUploadService } from '../../core/services/fileUpload/file-upload.se
   templateUrl: './update-files-data.component.html',
   styleUrl: './update-files-data.component.css'
 })
-export class UpdateFilesDataComponent implements OnInit,OnDestroy {
+export class UpdateFilesDataComponent implements OnInit {
 
   fileForm!: FormGroup;
   filesOfAdministration!: any[];
@@ -36,6 +36,7 @@ export class UpdateFilesDataComponent implements OnInit,OnDestroy {
   selectAdministration!: string;
   administrationAndCode!: administrations[];
   filesAndAdministration!:GetExcelNameForEntity[];
+  fileHeaders!:string[];
   showTable= true;
   dataEntriesOfAgency =  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
 
@@ -131,21 +132,30 @@ export class UpdateFilesDataComponent implements OnInit,OnDestroy {
     })
   };
 
+  /////
+
+  fileHeaderCatch(data:any){
+    this.filesAndAdministration.forEach((item:any)=>{
+      ///Loop over Items
+      if(item.Description = data.value){
+        ///Headers gotthem
+         this.fileHeaders = JSON.parse(item.TableHeaders);
+      }
+    })
+
+  };
+
   pushFileandCodetoBackEnd(formData: FormData, headers: any){
     this._IDSCServices.postApiData(formData, headers).subscribe({
       next:()=>{
       },
       error:(error :any)=>{
-
       }
     })
   };
 
-  getTableExcel(){
-    // _UpdateExcelService
-  }
+  getDataFromExcel(Id:number,excelId:number,from:string,to:string){
+    this._UpdateExcelService.getExcelData(Id,excelId,from,to)
+  };
 
-  ngOnDestroy(): void {
-
-  }
 }

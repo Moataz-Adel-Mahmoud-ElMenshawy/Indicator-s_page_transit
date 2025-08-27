@@ -6,9 +6,9 @@
         <div class="grid-list">
             <li>
                 <p-dropdown
-                formControlName="fileName"
+                formControlName="administration"
                 [options]="administrationAndCode"
-                [optionLabel]="Description"
+                optionLabel="Description"
                 (onChange)="ShowCodeOfSelectedAdmin($event)"
                 placeholder="الهيئة"/>
             </li>
@@ -17,6 +17,7 @@
                 <p-dropdown
                 formControlName="fileName"
                 [options]="filesOfAdministration"
+                (onChange)="fileHeaderCatch($event)"
                 placeholder="ملف الهيئة"/>
               </div>
             </li>
@@ -85,7 +86,9 @@
       <table dir="rtl">
         <thead>
           <tr>
-            <th *ngFor="let agency of dataEntriesOfAgency">{{agency}}</th>
+            <th *ngFor="let header of fileHeaders">
+              {{header}}
+            </th>
           </tr>
         </thead>
         <tbody>
