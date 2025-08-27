@@ -1,7 +1,6 @@
 <div class="container">
   <h3 class="title">أختر الهيئه و الملف للتعديل</h3>
   <div class="blue-bar"></div>
-  <div class="card-container">
     <form [formGroup]="fileForm">
       <ul>
         <div class="grid-list">
@@ -10,7 +9,6 @@
                   formControlName="fileName"
                   [options]="filesOfAdministration"
                   placeholder="ملف الهيئة"/>
-
             </li>
             <li>
 
@@ -62,22 +60,29 @@
 
       </ul>
     </form>
-
-    <div class="container table-data" *ngIf="showTable" >
-        <div class="blue-bar"></div>
-        <ng-container>
-          <table border="1">
-            <thead>
-              <tr>
-                  <th>{{ 'Agency ID' | translate }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let agency of dataEntriesOfAgency">
-              </tr>
-            </tbody>
-          </table>
-        </ng-container>
+</div>
+<br>
+<div class="container table-data" *ngIf="showTable">
+   <!-- CLEAN TABLE AND DATA -->
+  <button class="clear-Data-button">
+    Clean Data Table
+  </button>
+    <div class="blue-bar"></div>
+  <ng-container>
+    <div class="table-wrapper">
+      <table dir="rtl">
+        <thead>
+          <tr>
+            <th *ngFor="let agency of dataEntriesOfAgency">{{agency}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let agency of dataEntriesOfAgency">
+            <td *ngFor="let agency of dataEntriesOfAgency">{{agency}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
+
+  </ng-container>
 </div>

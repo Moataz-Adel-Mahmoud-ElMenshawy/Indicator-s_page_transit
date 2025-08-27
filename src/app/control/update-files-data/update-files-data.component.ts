@@ -11,6 +11,7 @@ import { AbstractControl,
   ValidatorFn } from '@angular/forms';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { CommonModule } from '@angular/common';
+import { ButtonModule } from "primeng/button";
 
 @Component({
   selector: 'app-update-files-data',
@@ -18,8 +19,9 @@ import { CommonModule } from '@angular/common';
   imports: [DropdownModule,
     TranslateModule,
     FormsModule,
+    ButtonModule,
     CommonModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule, ButtonModule],
   templateUrl: './update-files-data.component.html',
   styleUrl: './update-files-data.component.css'
 })
@@ -27,8 +29,9 @@ export class UpdateFilesDataComponent implements OnInit,OnDestroy {
 
   fileForm!: FormGroup;
   filesOfAdministration!: [];
-  showTable= false;
-  dataEntriesOfAgency =  [];
+  showTable= true;
+  dataEntriesOfAgency =  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+
   constructor(
     private _FormBuilder: FormBuilder,
   ){};

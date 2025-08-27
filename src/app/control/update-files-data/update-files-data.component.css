@@ -1,17 +1,22 @@
-body {
+ body {
+  display: flex;
   font-family: "HelveticaArabicRegular","sans-serif";
   margin: 0;
   padding: 0;
-  background-color: #f4f6fc; /* Light background */
+  background-color: #f4f6fc;
   color: #333;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  width: 10vh;
+  flex-direction: column;
 }
 
 .container {
+  width: 100%;
   max-width: 800px;
+  max-height: 30vh;
   font-family: "HelveticaArabicRegular","sans-serif";
-  margin: 20px auto;
+  margin: 10px auto;
   color: #919191 5%;
   position: relative;
 }
@@ -37,7 +42,7 @@ label {
   justify-content: space-between; /* Align buttons on opposite sides */
   align-items: center;
   height: fit-content;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .card-container.row .button {
@@ -62,7 +67,7 @@ ul {
   padding: 0;
   display: grid;
   flex-wrap: nowrap;
-  gap: 20px;
+  gap: 10px;
 }
 
 li {
@@ -217,26 +222,60 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 *  Page Table
 */
 
-.container .table-data {
-  max-height: 200px; /* Adjust based on row height */
-  overflow-y: auto; /* Enables vertical scrolling when content exceeds max height */
-  border: 1px solid #ccc; /* Adds a border around the table */
-  padding: 10px; /* Adds some space inside */
-  background-color: #fff; /* Optional: Keeps background clean */
+.container.table-data {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
-table {
-  width: 100%; /* Full width of the container */
+.clear-Data-button{
+  /* Display */
+  max-width: fit-content;
+  max-height: fit-content;
+
+  /* text */
+  font-size: 12px;
+  color: #fff;
+
+  /*style*/
+  padding: 6px;
+  background-color: #da2b25;
+  border-radius: 8px;
+}
+
+/* Scroll only table wrapper */
+.table-wrapper {
+  flex: 1 1 auto;
+  max-height: 80vh;       /* adjust so container never exceeds viewport */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Table layout */
+.table-wrapper table {
+  width: 100%;
   border-collapse: collapse;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  table-layout: fixed;
 }
 
-th,
-td {
-  padding: 15px;
-  text-align: left;
-  border: 1px solid #ddd; /* Subtle borders */
+.table-wrapper th,
+.table-wrapper td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+/* Sticky header */
+.table-wrapper thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f1f1f1; /* keeps header visible */
+  z-index: 2;                /* ensures header is above rows */
 }
 
 .styled-table th {
