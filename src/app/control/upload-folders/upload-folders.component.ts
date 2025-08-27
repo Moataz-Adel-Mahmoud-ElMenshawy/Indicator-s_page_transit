@@ -10,17 +10,33 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FileUpload, FileUploadModule } from 'primeng/fileupload';
 import { FileUploadEvent } from 'primeng/fileupload';
 import { FileUploadService } from '../../core/services/fileUpload/file-upload.service';
-import { administrations, fileAdministration } from '../../core/interfaces/upload-page';
+import { administrations, GetExcelNameForEntity } from '../../core/interfaces/upload-page';
 import { HttpHeaders } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 
+interface pdfNames
+{
+    Id: number;
+    Name: number;
+    Description: string;
+    Code: number;
+    TableName: string;
+    SearchByNameColumn: string;
+    TableHeaders: string;
+}
+
 @Component({
   selector: 'app-upload-folders',
   standalone: true,
-  imports: [DropdownModule, TranslateModule, FileUploadModule,
-            FormsModule, CommonModule, ReactiveFormsModule, ConfirmDialogModule],
+  imports: [DropdownModule,
+            TranslateModule,
+            FileUploadModule,
+            FormsModule,
+            CommonModule,
+            ReactiveFormsModule,
+            ConfirmDialogModule],
   providers: [ConfirmationService],
   templateUrl: './upload-folders.component.html',
   styleUrl: './upload-folders.component.css'
@@ -34,8 +50,8 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   uploadFile!: any;
   selectAdministration!: string;
   administrationAndCode!: administrations[];
-  filesAndAdministration!:fileAdministration[];
-  filesOfAdministration!: string[];
+  filesAndAdministration!:GetExcelNameForEntity[];
+  filesOfAdministration!: any[];
   CodeOfSelectedAdmin!:number;
 
   errormessage: string = '';
@@ -144,7 +160,7 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
 
         //Header of request
         const httpHeader = new HttpHeaders({
-          'entityId': adminName.Code.toString(),
+          'entityId': adminName.Id,
           'fromDate': startDate,
           'toDate': endDate,
         })
@@ -207,8 +223,9 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   }
 
   ShowCodeOfSelectedAdmin(data:any){
+    console.log(data.value.Id)
     //repeat the data again
-    this.getAdministrationFilesFrom(data.value.Code);
+    this.getAdministrationFilesFrom(data.value.Id);
   };
 
   /*
@@ -224,15 +241,16 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
     })
   };
 
-  getAdministrationFilesFrom(Code: number){
-    this._IDSCServices.getApiAdminfiles(Code).subscribe({
+  getAdministrationFilesFrom(Id: number){
+    this._IDSCServices.getApiAdminfiles(Id).subscribe({
       next:(res:any)=>{
         ///get Files from Administration
-        this.filesAndAdministration = [...res];
+        this.filesAndAdministration = res.pdfNames;
       },
       complete:()=>{
         //get Data fromlast row
-        this.filesOfAdministration = this.filesAndAdministration[0].UploadExcel;
+        console.log(this.filesAndAdministration);
+        this.filesOfAdministration = this.filesAndAdministration.map(item => item.Description);
       }
     })
   };

@@ -5,13 +5,20 @@
       <ul>
         <div class="grid-list">
             <li>
-                  <p-dropdown
-                  formControlName="fileName"
-                  [options]="filesOfAdministration"
-                  placeholder="ملف الهيئة"/>
+                <p-dropdown
+                formControlName="fileName"
+                [options]="administrationAndCode"
+                [optionLabel]="Description"
+                (onChange)="ShowCodeOfSelectedAdmin($event)"
+                placeholder="الهيئة"/>
             </li>
             <li>
-
+              <div *ngIf="fileForm.get('administration')?.value && fileForm.get('administration')?.touched">
+                <p-dropdown
+                formControlName="fileName"
+                [options]="filesOfAdministration"
+                placeholder="ملف الهيئة"/>
+              </div>
             </li>
         </div>
 
@@ -62,11 +69,16 @@
     </form>
 </div>
 <br>
-<div class="container table-data" *ngIf="showTable">
+<div class="table-data" *ngIf="showTable">
    <!-- CLEAN TABLE AND DATA -->
-  <button class="clear-Data-button">
-    Clean Data Table
-  </button>
+    <div>
+      <button class="clear-Data-button">
+        Clean Data Table
+      </button>
+      <span class="file-name">
+        FILE NAME HERE
+      </span>
+    </div>
     <div class="blue-bar"></div>
   <ng-container>
     <div class="table-wrapper">

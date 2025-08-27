@@ -12,6 +12,9 @@ import { AbstractControl,
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from "primeng/button";
+import { administrations, GetExcelNameForEntity } from '../../core/interfaces/upload-page';
+import { UpdateExcelService } from '../../core/services/updateExcel/update-excel.service';
+import { FileUploadService } from '../../core/services/fileUpload/file-upload.service';
 
 @Component({
   selector: 'app-update-files-data',
@@ -28,25 +31,44 @@ import { ButtonModule } from "primeng/button";
 export class UpdateFilesDataComponent implements OnInit,OnDestroy {
 
   fileForm!: FormGroup;
-  filesOfAdministration!: [];
+  filesOfAdministration!: any[];
+  uploadFile!: any;
+  selectAdministration!: string;
+  administrationAndCode!: administrations[];
+  filesAndAdministration!:GetExcelNameForEntity[];
   showTable= true;
   dataEntriesOfAgency =  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
 
   constructor(
     private _FormBuilder: FormBuilder,
+    private _UpdateExcelService:UpdateExcelService,
+    private _IDSCServices: FileUploadService
   ){};
 
   ngOnInit(): void {
+    // Get Data
+    this.getAdministrationsFromServer();
 
-    ///Form Builder
+    // Form build
     this.fileForm = this._FormBuilder.group({
-      start_date : new FormControl('',[RxwebValidators.required()]),
-      end_date: new FormControl({ value: '', disabled: false }, [
+      administration: new FormControl('',[]),
+      fileName: new FormControl('',[]),
+      start_date: new FormControl('', RxwebValidators.required()),
+      end_date: new FormControl({ value: '', disabled: true }, [
         RxwebValidators.required(),
         this.dateGreaterThan('start_date') // Custom validator to ensure end_date > start_date
       ]),
-      fileName : new FormControl('', [RxwebValidators.required()])
-    })
+    });
+
+    // Enable/disable end_date based on start_date value
+    this.fileForm.get('start_date')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.fileForm.get('end_date')?.enable(); // Enable end_date when start_date is set
+      } else {
+        this.fileForm.get('end_date')?.setValue('');
+        this.fileForm.get('end_date')?.disable(); // Disable end_date if start_date is empty
+      }
+    });
   };
 
     // Custom validator to ensure end_date is greater than start_date
@@ -74,6 +96,53 @@ export class UpdateFilesDataComponent implements OnInit,OnDestroy {
     if(datefrom?.valid && dateto?.valid && filename?.valid){
 
     }
+  }
+
+  ShowCodeOfSelectedAdmin(data:any){
+    console.log(data.value.Id)
+    //repeat the data again
+    this.getAdministrationFilesFrom(data.value.Id);
+  };
+
+  /*
+  *  Api data functions
+  */
+
+  getAdministrationsFromServer(){
+    this._IDSCServices.getApiAdministrations().subscribe({
+      next:(res:any)=>{
+        //get data of administration
+        this.administrationAndCode = [...res];
+      }
+    })
+  };
+
+  getAdministrationFilesFrom(Id: number){
+    this._IDSCServices.getApiAdminfiles(Id).subscribe({
+      next:(res:any)=>{
+        ///get Files from Administration
+        this.filesAndAdministration = res.pdfNames;
+      },
+      complete:()=>{
+        //get Data fromlast row
+        console.log(this.filesAndAdministration);
+        this.filesOfAdministration = this.filesAndAdministration.map(item => item.Description);
+      }
+    })
+  };
+
+  pushFileandCodetoBackEnd(formData: FormData, headers: any){
+    this._IDSCServices.postApiData(formData, headers).subscribe({
+      next:()=>{
+      },
+      error:(error :any)=>{
+
+      }
+    })
+  };
+
+  getTableExcel(){
+    // _UpdateExcelService
   }
 
   ngOnDestroy(): void {
