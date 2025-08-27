@@ -17,6 +17,7 @@
                 <p-dropdown
                 formControlName="fileName"
                 [options]="filesOfAdministration"
+                optionLabel="Description"
                 (onChange)="fileHeaderCatch($event)"
                 placeholder="ملف الهيئة"/>
               </div>
@@ -92,7 +93,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let agency of dataEntriesOfAgency">
+          <tr *ngFor="let data of dataEntriesOfAgency">
             <td *ngFor="let agency of dataEntriesOfAgency">{{agency}}</td>
           </tr>
         </tbody>

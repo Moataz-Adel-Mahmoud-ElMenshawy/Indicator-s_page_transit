@@ -15,6 +15,7 @@ import { ButtonModule } from "primeng/button";
 import { administrations, GetExcelNameForEntity } from '../../core/interfaces/upload-page';
 import { UpdateExcelService } from '../../core/services/updateExcel/update-excel.service';
 import { FileUploadService } from '../../core/services/fileUpload/file-upload.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-update-files-data',
@@ -39,6 +40,7 @@ export class UpdateFilesDataComponent implements OnInit {
   fileHeaders!:string[];
   showTable= true;
   dataEntriesOfAgency =  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+  fileRows!:any[];
 
   constructor(
     private _FormBuilder: FormBuilder,
@@ -59,6 +61,11 @@ export class UpdateFilesDataComponent implements OnInit {
         RxwebValidators.required(),
         this.dateGreaterThan('start_date') // Custom validator to ensure end_date > start_date
       ]),
+    });
+
+    // Subscribe to form changes
+    this.fileForm.valueChanges.subscribe(() => {
+      this.checkAndFetchData();
     });
 
     // Enable/disable end_date based on start_date value
@@ -127,7 +134,7 @@ export class UpdateFilesDataComponent implements OnInit {
       complete:()=>{
         //get Data fromlast row
         console.log(this.filesAndAdministration);
-        this.filesOfAdministration = this.filesAndAdministration.map(item => item.Description);
+        this.filesOfAdministration = this.filesAndAdministration.map(item=>item)
       }
     })
   };
@@ -136,10 +143,16 @@ export class UpdateFilesDataComponent implements OnInit {
 
   fileHeaderCatch(data:any){
     this.filesAndAdministration.forEach((item:any)=>{
+      // console.log(data.value.Description);
+      // console.log(item.Description);
+      // console.log(typeof data.value);
+      // console.log(typeof item.Description);
       ///Loop over Items
-      if(item.Description = data.value){
+      if(item.Description === data.value.Description){
+        console.log(data.value);
+        console.log(item.Description);
         ///Headers gotthem
-         this.fileHeaders = JSON.parse(item.TableHeaders);
+         this.fileHeaders = JSON.parse(item.TableHeaders.trim());
       }
     })
 
@@ -154,8 +167,45 @@ export class UpdateFilesDataComponent implements OnInit {
     })
   };
 
-  getDataFromExcel(Id:number,excelId:number,from:string,to:string){
-    this._UpdateExcelService.getExcelData(Id,excelId,from,to)
+  getDataFromExcel(Id:any){
+    this._UpdateExcelService.getExcelData(Id).subscribe({
+      next:(item:any[])=>{
+        this.fileRows = item;
+        console.log(this.fileRows);
+      },
+      complete:()=>{
+        ///
+      }
+    })
+  };
+
+  checkAndFetchData() {
+  // Only trigger if the form is valid
+    if (this.fileForm.valid) {
+      // Make sure all controls have values (not just valid)
+      const hasAllValues = Object.values(this.fileForm.getRawValue()).every(v => v !== '' && v !== null);
+
+      const adminName: any = this.fileForm.get('administration')?.value;
+      const fileAdminName: any = this.fileForm.get('fileName')?.value;
+      const startDate: string = this.fileForm.get('start_date')?.value;
+      const endDate: string = this.fileForm.get('end_date')?.value;
+
+      console.log(adminName.Id);
+      console.log(fileAdminName.Id);
+      console.log(startDate);
+      console.log(endDate);
+
+      const httpHeader = new HttpHeaders({
+        'entityId': adminName.Id,
+        'excelId': fileAdminName.Id,
+        'fromDate': startDate,
+        'toDate': endDate,
+      })
+
+      if (hasAllValues) {
+        this.getDataFromExcel(httpHeader);
+      }
+    }
   };
 
 }

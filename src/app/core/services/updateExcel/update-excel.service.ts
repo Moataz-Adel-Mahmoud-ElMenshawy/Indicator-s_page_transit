@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,12 +8,12 @@ import { Injectable } from '@angular/core';
 export class UpdateExcelService {
 
   constructor(
-        private _httpClient: HttpClient
+    private _httpClient: HttpClient
   ) {  }
 
-  api = 'http://10.4.30.8:9877/api/JDSC/'
+  api = 'http://10.4.30.8:9877/api/JDSC'
 
-  getExcelData(Id: number, excelid: number, fromDate:string, endDate:string ){
-    return this._httpClient.get<any>(this.api+`${Id}`+`/${excelid}`+`/${fromDate}`+`/${endDate}`);
+  getExcelData(header:any):Observable<any>{
+    return this._httpClient.get<any>(this.api,header);
   }
 }
