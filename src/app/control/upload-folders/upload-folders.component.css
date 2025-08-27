@@ -91,13 +91,19 @@ li {
   box-sizing: border-box;
 }
 
+.grid-list .errorMessage{
+  justify-self: center;
+  align-self: center;
+}
+
 /* Error Message */
 .errorMessage{
   align-items: center;
   text-align: center;
   background-color: #da2b25;
-  width:100%;
-  height: 30px;
+  width:70%;
+  height: fit-content;
+  padding: 2px;
   margin: 5px;
   color: #fbfbfb;
 }
@@ -106,8 +112,9 @@ li {
   align-items: center;
   text-align: center;
   background-color: #40a52b;
-  width:100%;
-  height: 30px;
+  width:70%;
+  height: fit-content;
+  padding: 2px;
   margin: 5px;
   color: #fbfbfb;
 }
@@ -118,7 +125,7 @@ li {
   font-weight: bold;
 }
 
-.errorText{
+.successText{
   font-family: 'Times New Roman', Times, serif;
   font-size: 14;
   font-weight: bold;
@@ -239,6 +246,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   height: fit-content;
   align-items: stretch;
+  margin: 5px 50px 5px 0px;
   gap: 5%;
 }
 

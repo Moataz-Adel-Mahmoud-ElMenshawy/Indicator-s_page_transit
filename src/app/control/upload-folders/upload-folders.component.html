@@ -75,15 +75,18 @@
              && fileForm.get('administration')?.valid && fileForm.get('administration')?.touched)
             ? { display: 'grid' } : { display: 'none' }">
 
+              <!-- FileUpload and Validation Messages -->
           <li>
 
+              <!-- File upload error -->
             <div class="errorMessage"
-            *ngIf="fileForm.invalid && fileForm.touched && isMSG && errormessage">
-              <span class="successText">
-                {{"The File Upload failed" | translate}}
+            *ngIf="fileForm.valid && isMSG && errormessage">
+              <span class="errorText">
+                {{errormessage | translate}}
               </span>
             </div>
-            <div *ngIf="fileForm.get('start_date')?.valid && fileForm.get('end_date')?.valid && fileForm.get('fileName')?.valid">
+
+            <div class="file-upload-controls" *ngIf="fileForm.get('start_date')?.valid && fileForm.get('end_date')?.valid && fileForm.get('fileName')?.valid">
               <span style="font-size: 20px; margin: 0px 0px 3px 3px">{{"Select the folder to upload" | translate}}</span>
               <p-fileUpload
                 #fileuploadID
@@ -91,23 +94,26 @@
                 [auto]="false"
                 chooseLabel="Select a Folder"
                 chooseIcon="pi pi-upload"
-                [showCancelButton]="true"
-                cancelIcon="pi pi-times"
-                [showUploadButton]="true"
-                uploadLabel="Upload"
+                accept=".xlsx,.csv,.xls,.xlx"
                 (onSelect)="onSelect($event)" />
 
-              <div class="action-buttons" [ngStyle]="isButtonControls? {display: 'flex'}:{display: 'true'}">
-                <p-button icon="pi pi-check" iconPos="top" (onClick)="onUpload($event)"/>
+              <div class="action-buttons">
+                <p-button [disabled]="!isButtonControls" (onClick)="onUpload()" severity="success">
+                  <i class="pi pi-check"></i>
+                </p-button>
 
-                <p-button icon="pi pi-times" iconPos="top" (onClick)="onCancel()"/>
+                <p-button [disabled]="!isButtonControls" (onClick)="onCancel()" severity="secondary">
+                  <i class="pi pi-times"></i>
+                </p-button>
               </div>
 
             </div>
+
+              <!-- File upload success -->
             <div class="successmessage"
-             *ngIf="fileForm.valid && fileForm.touched && isMSG && successmessage">
+             *ngIf="fileForm.valid && isMSG && successmessage">
               <span class="successText">
-                {{"The File Upload failed" | translate}}
+                {{successmessage | translate}}
               </span>
             </div>
           </li>

@@ -6,5 +6,9 @@
   "Error, Please make sure to select a value": "تأكد من أختيار قيم",
   "End date can't pre Start date": "وقت الأنتهاء لا يمكن أن يسبق وقت البدأ",
   "Select a start date":" أخر تاريخ بدأ",
-  "Select the folder to upload": "أختار ملف للعرض"
+  "Select the folder to upload": "أختار ملف للعرض",
+
+  "----------- ERROR MESSAGES ------------": "",
+  "File upload success": "تم رفع الملف",
+  "File upload failed":" حدث خطأ في رفع الملف"
 }

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup,
+import { AbstractControl, FormBuilder,
+        FormControl, FormGroup,
         FormsModule, ReactiveFormsModule,
         ValidationErrors,
         ValidatorFn} from '@angular/forms';
@@ -39,9 +40,10 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
 
   errormessage: string = '';
   successmessage: string ='';
+  file: any
   isMSG = false;
   isButtonControls = false;
-  confirmationDialogPosition: string = 'top';
+  confirmationDialogPosition: string = 'bottom';
 
 
   //Table control
@@ -87,7 +89,6 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
       }
     });
 
-
   };
 
   /*
@@ -125,59 +126,69 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
   /*
   *  On file Uplaod function
   */
-  async onUpload(event: FileUploadEvent | any) {
+  async onUpload() {
     this.isMSG =false;
     this.errormessage = '';
     this.successmessage ='';
-    const file = event.files[0]; //.[0];
     const adminName: any = this.fileForm.get('administration')?.value;
     const fileAdminName: string = this.fileForm.get('fileName')?.value;
     const startDate: string = this.fileForm.get('start_date')?.value;
     const endDate: string = this.fileForm.get('end_date')?.value;
 
-    //Body
-    const formData = new FormData();
-    formData.append('file', file);
+    try{
+      //Try and get data selected
+      if(adminName && fileAdminName && startDate && endDate){
+        //Body of request
+        const formData = new FormData();
+        formData.append('file', this.file);
 
-    //headers
-    const httpHeader = new HttpHeaders({
-      'entityId': adminName.Code.toString(),
-      'fromDate': startDate,
-      'toDate': endDate,
-    })
+        //Header of request
+        const httpHeader = new HttpHeaders({
+          'entityId': adminName.Code.toString(),
+          'fromDate': startDate,
+          'toDate': endDate,
+        })
 
-    ////WITHOUT ANY VALIDATIONS --BACKEND REQUEST--
-    this.pushFileandCodetoBackEnd(formData, httpHeader);
+        //WITHOUT ANY VALIDATIONS --BACKEND REQUEST--
+        this.pushFileandCodetoBackEnd(formData, httpHeader);
+
+      }
+    }catch(error: any){
+      console.error("Error Message " + error);
+      this.errormessage = "Error during file upload"
+    }
 
     // Functions
     function convertFileToBinaryString(file: File | Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    // Validate input
-    if (!file || !(file instanceof File || file instanceof Blob)) {
-      reject(new Error('Invalid file: not a File or Blob object'));
-      return;
-    }
+      return new Promise((resolve, reject) => {
+        // Validate input
+        if (!file || !(file instanceof File || file instanceof Blob)) {
+          reject(new Error('Invalid file: not a File or Blob object'));
+          return;
+        }
 
-    const reader = new FileReader();
+        const reader = new FileReader();
 
-    reader.onload = () => {
-      resolve(reader.result as string);
+        reader.onload = () => {
+          resolve(reader.result as string);
+        };
+
+        reader.onerror = () => {
+          reject(reader.error || new Error('Failed to read file'));
+        };
+
+        reader.readAsBinaryString(file);
+      });
+
     };
 
-    reader.onerror = () => {
-      reject(reader.error || new Error('Failed to read file'));
-    };
-
-    reader.readAsBinaryString(file);
-  });
-
-}
   };
 
-  async onSelect(event: FileUploadEvent | any){
-    if(!event){
+  onSelect(event: FileUploadEvent | any){
+    if(event){
       this.isMSG = false;
       this.isButtonControls = true;
+      this.file = event.files[0];
     }
   }
 
@@ -187,7 +198,7 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
       acceptButtonStyleClass: "p-button-danger",
       rejectButtonStyleClass: "p-button-text",
       accept:()=>{
-
+        this.resetMSGandButton()
       },
       reject:()=>{
 
@@ -230,15 +241,25 @@ export class UploadFoldersComponent implements OnInit, OnDestroy {
     this._IDSCServices.postApiData(formData, headers).subscribe({
       next:()=>{
         this.isMSG = true;
-      },
-      error:()=>{
-        console.log("Err")
-        this.errormessage = "ERROR DURING UPLOAD"
-      },complete:()=>{
         console.log("Succ")
-        this.successmessage = "Sucesss Upload"
+        this.successmessage = "File upload success"
+      },
+      error:(error :any)=>{
+        this.isMSG = true
+        console.log(error.message);
+        this.errormessage = "File upload failed"
       }
     })
+  }
+
+  /*
+  Reset message
+  */
+  resetMSGandButton(){
+    this.isMSG = false;
+    this.isButtonControls = false;
+    this.fileupload.clear();
+    this.file = undefined;
   }
 
   ngOnDestroy(): void {

@@ -20,6 +20,9 @@ export class FileUploadService {
   };
 
   postApiData(formData: FormData, headers:any):Observable<any>{
-    return this._httpClient.post<any>('http://10.4.30.8:9877/api/JDSC/upload-excel',formData, {headers});
+    return this._httpClient.post<any>('http://10.4.30.8:9877/api/JDSC/upload-excel',formData,
+      { headers,
+        responseType: "json",
+      });
   }
 }
