@@ -69,6 +69,13 @@
 
       </ul>
     </form>
+
+  <div class="errorMessage"
+      *ngIf="fileForm.valid && errormessage">
+    <span class="errorText">
+      {{errormessage | translate}}
+    </span>
+  </div>
 </div>
 <br>
 <div class="table-data" *ngIf="showTable">
@@ -93,8 +100,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of dataEntriesOfAgency">
-            <td *ngFor="let agency of dataEntriesOfAgency">{{agency}}</td>
+          <tr *ngFor="let data of fileHeaders">
+            <td *ngFor="let agency of fileHeaders">{{agency}}</td>
           </tr>
         </tbody>
       </table>

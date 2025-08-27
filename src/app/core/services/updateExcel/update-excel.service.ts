@@ -14,6 +14,6 @@ export class UpdateExcelService {
   api = 'http://10.4.30.8:9877/api/JDSC'
 
   getExcelData(header:any):Observable<any>{
-    return this._httpClient.get<any>(this.api,header);
+    return this._httpClient.get<any>(this.api,{headers: header});
   }
 }

@@ -311,3 +311,40 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-color: 2px solid rgb(164, 1, 1);
   background-color: #ffe6e6;
 }
+
+
+
+/* Error Message */
+.errorMessage{
+  align-items: center;
+  text-align: center;
+  background-color: #da2b25;
+  width:70%;
+  height: fit-content;
+  padding: 2px;
+  margin: 5px;
+  color: #fbfbfb;
+}
+
+.successmessage{
+  align-items: center;
+  text-align: center;
+  background-color: #40a52b;
+  width:70%;
+  height: fit-content;
+  padding: 2px;
+  margin: 5px;
+  color: #fbfbfb;
+}
+
+.errorText{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 14;
+  font-weight: bold;
+}
+
+.successText{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 14;
+  font-weight: bold;
+}

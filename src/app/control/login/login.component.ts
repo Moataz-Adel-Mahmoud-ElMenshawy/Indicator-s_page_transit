@@ -9,7 +9,7 @@ import { PasswordModule } from 'primeng/password';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule, RouterLink,
+  imports: [RouterModule,
     TranslateModule,
     PasswordModule,
     ButtonModule],

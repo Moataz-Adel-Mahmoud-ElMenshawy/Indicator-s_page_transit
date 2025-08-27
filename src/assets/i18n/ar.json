@@ -10,5 +10,6 @@
 
   "----------- ERROR MESSAGES ------------": "",
   "File upload success": "تم رفع الملف",
-  "File upload failed":" حدث خطأ في رفع الملف"
+  "File upload failed":" حدث خطأ في رفع الملف",
+  "Data retrieve failed": "خطأ في أسترجاع البيانات"
 }

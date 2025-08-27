@@ -38,9 +38,9 @@ export class UpdateFilesDataComponent implements OnInit {
   administrationAndCode!: administrations[];
   filesAndAdministration!:GetExcelNameForEntity[];
   fileHeaders!:string[];
-  showTable= true;
-  dataEntriesOfAgency =  [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+  showTable= false;
   fileRows!:any[];
+  errormessage!:string;
 
   constructor(
     private _FormBuilder: FormBuilder,
@@ -167,14 +167,16 @@ export class UpdateFilesDataComponent implements OnInit {
     })
   };
 
-  getDataFromExcel(Id:any){
-    this._UpdateExcelService.getExcelData(Id).subscribe({
+  getDataFromExcel(header:any){
+    this._UpdateExcelService.getExcelData(header).subscribe({
       next:(item:any[])=>{
         this.fileRows = item;
+        this.showTable = true
         console.log(this.fileRows);
       },
-      complete:()=>{
-        ///
+      error:(error:any)=>{
+        this.resetMSGandButton();
+        this.errormessage = "Data retrieve failed"
       }
     })
   };
@@ -182,6 +184,8 @@ export class UpdateFilesDataComponent implements OnInit {
   checkAndFetchData() {
   // Only trigger if the form is valid
     if (this.fileForm.valid) {
+      this.showTable = false;
+      this.errormessage = '';
       // Make sure all controls have values (not just valid)
       const hasAllValues = Object.values(this.fileForm.getRawValue()).every(v => v !== '' && v !== null);
 
@@ -204,8 +208,16 @@ export class UpdateFilesDataComponent implements OnInit {
 
       if (hasAllValues) {
         this.getDataFromExcel(httpHeader);
+        this.showTable = true
       }
+    }else{
+      this.resetMSGandButton();
     }
   };
+
+  resetMSGandButton(){
+    this.showTable = false;
+    this.fileRows = [];
+  }
 
 }
