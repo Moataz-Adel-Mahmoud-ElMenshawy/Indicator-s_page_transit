@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class UpdateExcelService {
     private _httpClient: HttpClient
   ) {  }
 
-  api = 'http://10.4.30.8:9877/api/JDSC'
+  api = `${environment.apiBaseUrl}JDSC`
 
   getExcelData(header:any):Observable<any>{
     return this._httpClient.get<any>(this.api,{headers: header});

@@ -108,6 +108,7 @@ export class UpdateFilesDataComponent implements OnInit {
 
   ShowCodeOfSelectedAdmin(data:any){
     console.log(data.value.Id)
+    console.log(data.value.TableName)
     //repeat the data again
     this.getAdministrationFilesFrom(data.value.Id);
   };
@@ -170,8 +171,15 @@ export class UpdateFilesDataComponent implements OnInit {
   getDataFromExcel(header:any){
     this._UpdateExcelService.getExcelData(header).subscribe({
       next:(item:any[])=>{
-        this.fileRows = item;
+        const ObjRows = item;
+        console.log(ObjRows)
+        this.fileRows = ObjRows.map((rowObj:any)=>{
+          console.log(rowObj);
+          const {Id, ...rest} = rowObj;
+          return Object.values(rest);
+        });
         this.showTable = true
+        console.log("Data Form server");
         console.log(this.fileRows);
       },
       error:(error:any)=>{

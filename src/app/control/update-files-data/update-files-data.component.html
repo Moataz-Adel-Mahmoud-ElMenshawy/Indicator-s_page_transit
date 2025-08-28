@@ -100,8 +100,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of fileHeaders">
-            <td *ngFor="let agency of fileHeaders">{{agency}}</td>
+          <tr *ngFor="let row of fileRows">
+            <td *ngFor="let cell of row">{{cell}}</td>
           </tr>
         </tbody>
       </table>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,11 @@ export class FileUploadService {
     private _httpClient: HttpClient
   ) { }
 
-  api=`http://10.4.30.8:9877/api/JDSC/upload-excel/`;
+  api=`${environment.apiBaseUrl}JDSC/upload-excel/`;
 
-  apiGetEntry = `http://10.4.30.8:9877/api/JDSC/GetEntities`;
+  apiGetEntry = `${environment.apiBaseUrl}JDSC/GetEntities`;
 
-  apiExcelname= `http://10.4.30.8:9877/api/JDSC/GetExcelNameForEntity/`
+  apiExcelname= `${environment.apiBaseUrl}JDSC/GetExcelNameForEntity/`
 
   getApiAdministrations():Observable<any>{
     return this._httpClient.get<any>(this.apiGetEntry);
