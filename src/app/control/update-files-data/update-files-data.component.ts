@@ -37,6 +37,7 @@ export class UpdateFilesDataComponent implements OnInit {
   selectAdministration!: string;
   administrationAndCode!: administrations[];
   filesAndAdministration!:GetExcelNameForEntity[];
+  fileDescription!: string;
   fileHeaders!:string[];
   showTable= false;
   fileRows!:any[];
@@ -149,9 +150,9 @@ export class UpdateFilesDataComponent implements OnInit {
       // console.log(typeof data.value);
       // console.log(typeof item.Description);
       ///Loop over Items
-      if(item.Description === data.value.Description){
+      if(item.Name === data.value.Name){
         console.log(data.value);
-        console.log(item.Description);
+        console.log(item.Name);
         ///Headers gotthem
          this.fileHeaders = JSON.parse(item.TableHeaders.trim());
       }
@@ -193,6 +194,7 @@ export class UpdateFilesDataComponent implements OnInit {
   // Only trigger if the form is valid
     if (this.fileForm.valid) {
       this.showTable = false;
+      this.fileDescription = '';
       this.errormessage = '';
       // Make sure all controls have values (not just valid)
       const hasAllValues = Object.values(this.fileForm.getRawValue()).every(v => v !== '' && v !== null);
@@ -206,6 +208,8 @@ export class UpdateFilesDataComponent implements OnInit {
       console.log(fileAdminName.Id);
       console.log(startDate);
       console.log(endDate);
+
+      this.fileDescription = fileAdminName.Description;
 
       const httpHeader = new HttpHeaders({
         'entityId': adminName.Id,
@@ -226,6 +230,7 @@ export class UpdateFilesDataComponent implements OnInit {
   resetMSGandButton(){
     this.showTable = false;
     this.fileRows = [];
+    this.fileDescription = '';
   }
 
 }

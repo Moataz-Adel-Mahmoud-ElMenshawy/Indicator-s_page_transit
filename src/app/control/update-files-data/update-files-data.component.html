@@ -17,7 +17,7 @@
                 <p-dropdown
                 formControlName="fileName"
                 [options]="filesOfAdministration"
-                optionLabel="Description"
+                optionLabel="Name"
                 (onChange)="fileHeaderCatch($event)"
                 placeholder="ملف الهيئة"/>
               </div>
@@ -84,8 +84,8 @@
       <button class="clear-Data-button">
         Clean Data Table
       </button>
-      <span class="file-name">
-        FILE NAME HERE
+      <span class="file-name" *ngIf="fileDescription">
+        {{fileDescription}}
       </span>
     </div>
     <div class="blue-bar"></div>
